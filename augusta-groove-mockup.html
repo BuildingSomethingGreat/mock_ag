@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Augusta Groove — Feel the Rhythm</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E8742A;--orange-bright:#FF9149;--orange-dim:rgba(232,116,42,.12);
+  --red:#C62B2B;--red-deep:#8B1A1A;
+  --teal:#2AEBD4;--teal-dim:rgba(42,235,212,.1);
+  --cream:#F5EDE3;--cream-dim:#A89F94;
+  --dark:#080610;--surface:#0F0B1A;--surface-light:#171122;
+  --plum:#2D1B3D;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--cream);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ===== LOADER ===== */
+#loader{position:fixed;inset:0;z-index:9999;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .8s,visibility .8s}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-rings{width:100px;height:100px;position:relative;margin-bottom:32px}
+.loader-ring{position:absolute;inset:0;border:3px solid transparent;border-radius:50%;animation:spin 1s linear infinite}
+.loader-ring:nth-child(1){border-top-color:var(--orange)}
+.loader-ring:nth-child(2){inset:10px;border-top-color:var(--teal);animation-duration:1.5s;animation-direction:reverse}
+.loader-ring:nth-child(3){inset:20px;border-top-color:var(--orange-bright);animation-duration:2s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-family:'Anton',sans-serif;font-size:18px;letter-spacing:8px;color:var(--orange);animation:pulse 1.5s ease infinite;text-transform:uppercase}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.9}}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(20px,4vw,60px);height:72px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(8,6,16,.97),rgba(8,6,16,0));backdrop-filter:blur(12px);transition:background .4s}
+nav.scrolled{background:rgba(8,6,16,.98)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-brand .logo-mark{height:44px;width:auto;filter:drop-shadow(0 0 10px rgba(232,116,42,.2))}
+.hero-logo-wm{position:absolute;right:-2%;top:50%;transform:translateY(-50%);width:50vw;max-width:500px;opacity:.04;pointer-events:none;z-index:1}
+.hero-logo-wm img{width:100%;height:auto}
+.footer-brand .logo-mark{height:55px;width:auto;filter:drop-shadow(0 0 12px rgba(232,116,42,.15))}
+.nav-brand span{font-family:'Anton',sans-serif;font-size:20px;color:var(--cream);letter-spacing:2px;text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{text-decoration:none;color:var(--cream-dim);font-family:'Syne',sans-serif;font-weight:600;font-size:12px;letter-spacing:2px;text-transform:uppercase;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--teal);transition:width .3s;border-radius:1px}
+.nav-links a:hover{color:var(--cream)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;background:var(--orange);color:var(--dark);text-decoration:none;border-radius:4px;transition:all .3s}
+.nav-cta:hover{background:var(--orange-bright);transform:scale(1.03)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:8px}
+.hamburger span{display:block;width:24px;height:2px;background:var(--cream);transition:all .3s}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;position:relative;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 65% 35%,rgba(198,43,43,.2),transparent 50%),radial-gradient(ellipse at 25% 75%,rgba(42,235,212,.06),transparent 45%),radial-gradient(ellipse at 80% 80%,var(--plum),transparent 40%),var(--dark)}
+.hero-grain{position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* Teal accent strokes — inspired by Hawks graphic */
+.hero-strokes{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.hero-strokes .stroke{position:absolute;background:var(--teal);border-radius:4px;opacity:.15;transform:rotate(-25deg)}
+.hero-strokes .stroke:nth-child(1){width:300px;height:8px;right:-50px;top:25%;animation:strokeSlide 8s ease infinite}
+.hero-strokes .stroke:nth-child(2){width:200px;height:5px;right:10%;top:55%;animation:strokeSlide 8s ease infinite 2s;opacity:.1}
+.hero-strokes .stroke:nth-child(3){width:150px;height:12px;right:5%;bottom:20%;animation:strokeSlide 8s ease infinite 4s;opacity:.08}
+@keyframes strokeSlide{0%,100%{transform:rotate(-25deg) translateX(0)}50%{transform:rotate(-25deg) translateX(-30px)}}
+
+.hero-logo-wm{position:absolute;right:-2%;top:50%;transform:translateY(-50%);width:50vw;max-width:500px;opacity:.035;pointer-events:none;z-index:1}
+.hero-logo-wm svg{width:100%;height:auto}
+
+.hero-content{position:relative;z-index:2;padding:0 clamp(24px,6vw,120px);max-width:820px;opacity:0;transform:translateY(40px);animation:fadeUp 1s ease forwards 1.6s}
+.hero-tag{font-family:'Syne',sans-serif;font-weight:600;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.hero-tag::before{content:'';width:35px;height:2px;background:var(--teal);border-radius:1px}
+.hero-h1{font-family:'Anton',sans-serif;font-size:clamp(56px,11vw,130px);line-height:.88;margin-bottom:24px;text-transform:uppercase;letter-spacing:-1px}
+.hero-h1 .orange{color:var(--orange)}
+.hero-h1 .teal-outline{-webkit-text-stroke:2px var(--teal);color:transparent}
+.hero-desc{font-size:16px;line-height:1.8;color:var(--cream-dim);max-width:460px;margin-bottom:36px;font-weight:300}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:16px 36px;background:var(--orange);color:var(--dark);text-decoration:none;border-radius:4px;transition:all .3s;border:none;cursor:pointer;display:inline-block}
+.btn-primary:hover{background:var(--orange-bright);transform:translateY(-2px);box-shadow:0 8px 30px rgba(232,116,42,.3)}
+.btn-secondary{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:16px 36px;border:2px solid rgba(42,235,212,.25);color:var(--teal);text-decoration:none;border-radius:4px;transition:all .3s;background:transparent;cursor:pointer;display:inline-block}
+.btn-secondary:hover{border-color:var(--teal);background:var(--teal-dim)}
+
+/* Hero stat callouts — inspired by "213 TOTAL STEALS" */
+.hero-callouts{position:absolute;right:clamp(24px,5vw,100px);top:50%;transform:translateY(-50%);z-index:2;display:flex;flex-direction:column;gap:24px;opacity:0;animation:fadeUp 1s ease forwards 2.1s}
+.hero-callout{text-align:right;position:relative;padding-right:16px}
+.hero-callout::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:var(--teal);border-radius:2px}
+.hero-callout-num{font-family:'Anton',sans-serif;font-size:56px;color:var(--orange);line-height:1;letter-spacing:-1px}
+.hero-callout-label{font-family:'Syne',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--cream-dim);font-weight:600}
+
+.scroll-ind{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s ease forwards 2.5s}
+.scroll-ind span{font-family:'Syne',sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--cream-dim)}
+.scroll-line{width:1px;height:40px;background:linear-gradient(180deg,var(--teal),transparent);animation:scrollP 2s ease infinite}
+@keyframes scrollP{0%,100%{transform:scaleY(1);opacity:.5}50%{transform:scaleY(.4);opacity:1}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+.section-pad{padding:clamp(60px,10vw,140px) clamp(24px,6vw,120px)}
+.section-header{margin-bottom:56px}
+.section-header .tag{font-family:'Syne',sans-serif;font-weight:600;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.section-header .tag::before{content:'';width:20px;height:2px;background:var(--teal);border-radius:1px}
+.section-header h2{font-family:'Anton',sans-serif;font-size:clamp(32px,5vw,56px);letter-spacing:1px;text-transform:uppercase;line-height:1}
+
+/* ===== SCHEDULE ===== */
+.schedule-section{background:var(--surface)}
+.schedule-grid{display:flex;flex-direction:column;gap:2px}
+.game-row{display:grid;grid-template-columns:120px 1fr auto auto;align-items:center;gap:20px;padding:18px 24px;background:rgba(255,255,255,.015);border-left:3px solid transparent;transition:all .4s cubic-bezier(.23,1,.32,1);cursor:pointer}
+.game-row:hover{background:rgba(232,116,42,.04);border-left-color:var(--orange);transform:translateX(4px)}
+.game-row.home-game{border-left-color:rgba(42,235,212,.2)}
+.game-row.home-game:hover{border-left-color:var(--teal)}
+.game-date{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;color:var(--orange)}
+.game-matchup{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:400}
+.game-matchup strong{font-weight:600;color:var(--teal)}
+.game-time{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:2px;color:var(--cream-dim);font-weight:600}
+.game-badge{font-family:'Syne',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;font-weight:700;border-radius:2px}
+.game-badge.home{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(42,235,212,.2)}
+.game-badge.away{background:rgba(245,237,227,.03);color:var(--cream-dim);border:1px solid rgba(245,237,227,.06)}
+
+/* ===== ROSTER ===== */
+.roster-section{background:var(--dark);position:relative;overflow:hidden}
+.roster-section::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(232,116,42,.06),transparent 60%);pointer-events:none}
+.roster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:3px}
+.player-card{position:relative;background:var(--surface);overflow:hidden;cursor:pointer;transition:transform .5s cubic-bezier(.23,1,.32,1),box-shadow .5s}
+.player-card:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 60px rgba(232,116,42,.06)}
+.player-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--teal));transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.23,1,.32,1);z-index:3}
+.player-card:hover::before{transform:scaleX(1)}
+.player-visual{width:100%;aspect-ratio:3/4;position:relative;overflow:hidden}
+.player-portrait{width:100%;height:100%;position:relative}
+.player-portrait-bg{position:absolute;inset:0;background:linear-gradient(170deg,var(--surface-light) 0%,var(--dark) 50%,rgba(198,43,43,.06))}
+.player-portrait-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Anton',sans-serif;font-size:140px;color:rgba(42,235,212,.04);line-height:1;transition:color .4s}
+.player-card:hover .player-portrait-num{color:rgba(42,235,212,.1)}
+.player-portrait-sil{position:absolute;bottom:0;left:50%;transform:translateX(-50%);z-index:1;width:65%;height:85%}
+.player-portrait-sil svg{width:100%;height:100%;opacity:.1}
+.player-card:hover .player-portrait-sil svg{opacity:.18}
+.player-glow{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:80%;height:40%;background:radial-gradient(ellipse,rgba(232,116,42,.07),transparent 70%);z-index:1;opacity:0;transition:opacity .5s}
+.player-card:hover .player-glow{opacity:1}
+.player-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(8,6,16,.92));z-index:2;pointer-events:none}
+/* Teal accent stroke on card */
+.player-accent{position:absolute;bottom:20%;right:-10px;width:60px;height:4px;background:var(--teal);opacity:0;transform:rotate(-30deg);transition:all .5s;z-index:2}
+.player-card:hover .player-accent{opacity:.3;right:10px}
+.player-info{position:absolute;bottom:0;left:0;right:0;padding:16px 18px;z-index:3}
+.player-pos{font-family:'Syne',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:2px;font-weight:600}
+.player-name{font-family:'Anton',sans-serif;font-size:22px;text-transform:uppercase;letter-spacing:.5px;line-height:1.1}
+.player-stats{display:flex;gap:12px;margin-top:8px;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s,opacity .4s}
+.player-card:hover .player-stats{max-height:40px;opacity:1}
+.player-stats span{font-size:11px;color:var(--cream-dim)}
+.player-stats strong{color:var(--orange);font-weight:600}
+
+/* ===== ABOUT ===== */
+.about-section{background:linear-gradient(180deg,var(--dark),rgba(198,43,43,.06) 50%,var(--dark));overflow:hidden;position:relative}
+.about-section::after{content:'';position:absolute;top:30%;right:-100px;width:400px;height:8px;background:var(--teal);opacity:.06;transform:rotate(-25deg);border-radius:4px}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about-visual{position:relative;height:480px;display:flex;align-items:center;justify-content:center}
+.about-stat-block{text-align:center}
+.about-stat-block .big-num{font-family:'Anton',sans-serif;font-size:clamp(100px,15vw,180px);color:var(--orange);line-height:.85;opacity:.15}
+.about-stat-block .big-label{font-family:'Syne',sans-serif;font-size:14px;letter-spacing:5px;text-transform:uppercase;color:var(--teal);font-weight:600;margin-top:-10px}
+.about-text h3{font-family:'Anton',sans-serif;font-size:clamp(28px,4vw,44px);text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;line-height:1.05}
+.about-text h3 .orange{color:var(--orange)}
+.about-text h3 .teal{color:var(--teal)}
+.about-text p{color:var(--cream-dim);line-height:1.8;margin-bottom:20px;font-weight:300;font-size:15px}
+
+/* ===== TICKETS ===== */
+.tickets-cta{background:var(--surface);position:relative;overflow:hidden}
+.tickets-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(198,43,43,.1),transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(42,235,212,.05),transparent 60%)}
+.tickets-cta::after{content:'';position:absolute;top:20%;left:-100px;width:500px;height:6px;background:var(--teal);opacity:.05;transform:rotate(-25deg);border-radius:4px}
+.tickets-inner{position:relative;z-index:2;text-align:center;max-width:700px;margin:0 auto}
+.tickets-inner .tag{justify-content:center}
+.tickets-inner .tag::before,.tickets-inner .tag::after{content:'';width:20px;height:2px;background:var(--teal);border-radius:1px}
+.tickets-inner h2{font-family:'Anton',sans-serif;font-size:clamp(36px,6vw,64px);text-transform:uppercase;letter-spacing:1px;line-height:1;margin-bottom:16px}
+.tickets-inner p{color:var(--cream-dim);font-size:16px;line-height:1.7;margin-bottom:40px;font-weight:300}
+.ticket-options{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+.ticket-card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);padding:32px 24px;flex:1;max-width:220px;min-width:190px;transition:all .5s cubic-bezier(.23,1,.32,1);cursor:pointer;position:relative;overflow:hidden;border-left:3px solid transparent}
+.ticket-card:hover{background:rgba(232,116,42,.04);border-color:rgba(232,116,42,.12);border-left-color:var(--orange);transform:translateY(-6px)}
+.ticket-card.featured{border-left-color:var(--teal);background:rgba(42,235,212,.03)}
+.ticket-badge{position:absolute;top:12px;right:12px;font-family:'Syne',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;background:var(--teal);color:var(--dark);padding:3px 10px;border-radius:2px;display:none;font-weight:700}
+.ticket-card.featured .ticket-badge{display:block}
+.ticket-type{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;font-weight:600}
+.ticket-price{font-family:'Anton',sans-serif;font-size:48px;margin-bottom:4px;letter-spacing:-1px}
+.ticket-price sup{font-size:18px;vertical-align:super}
+.ticket-desc{font-size:12px;color:var(--cream-dim);line-height:1.6}
+
+/* ===== FOOTER ===== */
+footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.04);padding:60px clamp(24px,6vw,120px) 24px}
+.footer-top{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand{display:flex;flex-direction:column;gap:10px}
+.footer-brand .logo-mark{height:50px;width:auto;align-self:flex-start}
+.footer-brand p{font-size:13px;color:var(--cream-dim);line-height:1.7;max-width:280px}
+.footer-col h4{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:16px;font-weight:700}
+.footer-col a{display:block;font-size:13px;color:var(--cream-dim);text-decoration:none;margin-bottom:10px;transition:color .3s}
+.footer-col a:hover{color:var(--cream)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.04);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom span{font-size:11px;color:var(--cream-dim);letter-spacing:1px}
+
+/* ===== ANIMATIONS ===== */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.08s}.rd2{transition-delay:.14s}.rd3{transition-delay:.2s}.rd4{transition-delay:.26s}.rd5{transition-delay:.32s}.rd6{transition-delay:.38s}
+
+/* ===== MOBILE MENU ===== */
+.mobile-menu{position:fixed;inset:0;z-index:150;background:rgba(8,6,16,.98);backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;opacity:0;visibility:hidden;transition:all .4s}
+.mobile-menu.open{opacity:1;visibility:visible}
+.mobile-menu a{font-family:'Anton',sans-serif;font-size:32px;color:var(--cream);text-decoration:none;transition:color .3s;text-transform:uppercase;letter-spacing:3px}
+.mobile-menu a:hover{color:var(--orange)}
+.mobile-close{position:absolute;top:24px;right:24px;background:none;border:none;cursor:pointer}
+.mobile-close span{display:block;width:24px;height:2px;background:var(--cream);margin:5px 0}
+.mobile-close span:first-child{transform:rotate(45deg) translateY(5px)}
+.mobile-close span:last-child{transform:rotate(-45deg) translateY(-5px)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .about-grid{grid-template-columns:1fr;gap:40px}.about-visual{height:260px;order:2}
+  .hero-callouts{display:none}.footer-top{grid-template-columns:1fr 1fr}
+  .game-row{grid-template-columns:90px 1fr auto}.game-badge{display:none}
+}
+@media(max-width:768px){
+  .nav-links{display:none}.nav-cta.desktop{display:none}.hamburger{display:flex}
+  .btn-primary,.btn-secondary{padding:14px 28px;font-size:11px}
+  .roster-grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr))}
+  .player-name{font-size:18px}
+  .ticket-options{flex-direction:column;align-items:center}.ticket-card{max-width:100%;width:100%}
+  .footer-top{grid-template-columns:1fr}
+  .game-row{grid-template-columns:1fr;gap:6px;padding:14px 16px}
+  .hero-logo-wm{width:80vw;opacity:.02}
+}
+@media(max-width:480px){.roster-grid{grid-template-columns:1fr 1fr;gap:2px}.player-info{padding:12px}.player-pos{font-size:8px}.player-name{font-size:15px}.player-visual{aspect-ratio:1}}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-rings"><div class="loader-ring"></div><div class="loader-ring"></div><div class="loader-ring"></div></div>
+  <div class="loader-text">Augusta Groove</div>
+</div>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="menuClose"><span></span><span></span></button>
+  <a href="#" onclick="closeMenu()">Home</a>
+  <a href="#schedule" onclick="closeMenu()">Schedule</a>
+  <a href="#roster" onclick="closeMenu()">Roster</a>
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#tickets" onclick="closeMenu()">Tickets</a>
+</div>
+
+<nav id="mainNav">
+  <a class="nav-brand" href="#">
+    <img class="logo-mark" src="https://i.postimg.cc/PxqBRBXD/image.png" alt="Augusta Groove">
+    <span>Groove</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#roster">Roster</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#">News</a></li>
+  </ul>
+  <a class="nav-cta desktop" href="#tickets">Tickets</a>
+  <button class="hamburger" id="menuOpen"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-strokes"><div class="stroke"></div><div class="stroke"></div><div class="stroke"></div></div>
+  <div class="hero-logo-wm"><img src="https://i.postimg.cc/PxqBRBXD/image.png" alt=""></div>
+  <div class="hero-content">
+    <div class="hero-tag">USBC Champion League · 2026</div>
+    <h1 class="hero-h1">FEEL<br><span class="orange">THE</span> <span class="teal-outline">GROOVE</span></h1>
+    <p class="hero-desc">Professional basketball arrives in Augusta. Elite homegrown talent, electric atmosphere, and a rhythm all our own. Season tips off May 31st.</p>
+    <div class="hero-actions">
+      <a href="#tickets" class="btn-primary">Get Season Tickets</a>
+      <a href="#schedule" class="btn-secondary">Full Schedule →</a>
+    </div>
+  </div>
+  <div class="hero-callouts">
+    <div class="hero-callout"><div class="hero-callout-num">22</div><div class="hero-callout-label">Total Games</div></div>
+    <div class="hero-callout"><div class="hero-callout-num">11</div><div class="hero-callout-label">Home Games</div></div>
+    <div class="hero-callout"><div class="hero-callout-num">MAY</div><div class="hero-callout-label">Tip-Off</div></div>
+  </div>
+  <div class="scroll-ind"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<section class="schedule-section section-pad" id="schedule">
+  <div class="section-header reveal"><div class="tag">2026 Season</div><h2>Game Schedule</h2></div>
+  <div class="schedule-grid" id="scheduleGrid"></div>
+</section>
+
+<section class="roster-section section-pad" id="roster">
+  <div class="section-header reveal"><div class="tag">The Squad</div><h2>Meet the Groove</h2></div>
+  <div class="roster-grid" id="rosterGrid"></div>
+</section>
+
+<section class="about-section section-pad" id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-stat-block">
+        <div class="big-num">AG</div>
+        <div class="big-label">Augusta · Georgia</div>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-header reveal"><div class="tag">Our Story</div><h3>Homegrown<br><span class="orange">Heroes.</span> <span class="teal">Home</span> Court.</h3></div>
+      <p class="reveal">The Augusta Groove roster features elite talent — the best of the best from our local community and from across the globe. Many are homegrown heroes who advanced from local high schools to successful collegiate careers and professional experience.</p>
+      <p class="reveal">Now they're returning home to compete at the highest level in front of the greatest fans in the nation. Partnering with Augusta Sports Council and local businesses — this is professional basketball, right here in Augusta.</p>
+      <a href="#tickets" class="btn-primary reveal">Join the Movement</a>
+    </div>
+  </div>
+</section>
+
+<section class="tickets-cta section-pad" id="tickets">
+  <div class="tickets-inner">
+    <div class="tag reveal">Season Tips Off May 31</div>
+    <h2 class="reveal">Don't Miss<br>A Single Beat</h2>
+    <p class="reveal">Lock in your seat for the inaugural 2026 USBC season. 11 home games of elite professional basketball every Sunday.</p>
+    <div class="ticket-options">
+      <div class="ticket-card reveal rd1"><div class="ticket-type">Single Game</div><div class="ticket-price"><sup>$</sup>20</div><div class="ticket-desc">General admission for one home game. Feel the energy courtside.</div></div>
+      <div class="ticket-card featured reveal rd2"><div class="ticket-badge">Best Value</div><div class="ticket-type">Season Pass</div><div class="ticket-price"><sup>$</sup>149</div><div class="ticket-desc">All 11 home games. The full Groove experience, every Sunday.</div></div>
+      <div class="ticket-card reveal rd3"><div class="ticket-type">VIP Courtside</div><div class="ticket-price"><sup>$</sup>299</div><div class="ticket-desc">Premium seats. Player access. Exclusive merch package included.</div></div>
+    </div>
+    <a href="#" class="btn-primary reveal">Buy Tickets Now</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img class="logo-mark" src="https://i.postimg.cc/PxqBRBXD/image.png" alt="Augusta Groove">
+      <p>Men's professional basketball in Augusta, GA. USBC Champion League, presented by USBN.</p>
+    </div>
+    <div class="footer-col"><h4>Quick Links</h4><a href="#">Home</a><a href="#">Schedule</a><a href="#">Tickets</a><a href="#">News</a><a href="#">Contact</a></div>
+    <div class="footer-col"><h4>League</h4><a href="#">USBC</a><a href="#">USBNtv</a><a href="#">Augusta Sports Council</a><a href="#">Partner With Us</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 Augusta Groove · All rights reserved · Presented by USBN</span></div>
+</footer>
+
+<script>
+const games=[{date:"May 31",opp:"Strong Steppers",away:true},{date:"Jun 7",opp:"Team Sacrifice",away:true},{date:"Jun 14",opp:"South Atlanta Crows",away:false},{date:"Jun 21",opp:"Georgia Prime",away:false},{date:"Jun 28",opp:"Georgia Kangaroos",away:true},{date:"Jul 5",opp:"Duluth Express",away:true},{date:"Jul 12",opp:"Central Alabama Jaguars",away:true},{date:"Jul 19",opp:"ATL TakeOver",away:false},{date:"Jul 26",opp:"Atlanta Legends",away:false},{date:"Aug 2",opp:"Atlanta Defenders",away:true},{date:"Aug 9",opp:"Anniston Model City BC",away:true},{date:"Aug 16",opp:"Strong Steppers",away:false},{date:"Aug 23",opp:"Team Sacrifice",away:false},{date:"Aug 30",opp:"South Atlanta Crows",away:true},{date:"Sep 6",opp:"Georgia Prime",away:true},{date:"Sep 13",opp:"Georgia Kangaroos",away:false},{date:"Sep 20",opp:"Duluth Express",away:false},{date:"Sep 27",opp:"Central Alabama Jaguars",away:false},{date:"Oct 4",opp:"ATL TakeOver",away:true},{date:"Oct 11",opp:"Atlanta Legends",away:true},{date:"Oct 18",opp:"Atlanta Defenders",away:false},{date:"Oct 25",opp:"Anniston Model City BC",away:false}];
+const dl=['rd1','rd2','rd3','rd4','rd5','rd6'];
+const sg=document.getElementById('scheduleGrid');
+games.forEach((g,i)=>{const r=document.createElement('div');r.className='game-row reveal '+dl[i%6]+(g.away?'':' home-game');r.innerHTML=`<div class="game-date">${g.date}</div><div class="game-matchup">${g.away?'Groove <strong>at</strong> '+g.opp:'Groove <strong>vs</strong> '+g.opp}</div><div class="game-time">3–5 PM</div><div class="game-badge ${g.away?'away':'home'}">${g.away?'Away':'Home'}</div>`;sg.appendChild(r)});
+
+const players=[{name:"Marcus Williams",pos:"Point Guard",num:"01",ppg:"19.2",s2:"APG",s2v:"6.8",s3:"SPG",s3v:"2.1"},{name:"DeShawn Carter",pos:"Shooting Guard",num:"03",ppg:"17.5",s2:"APG",s2v:"3.4",s3:"3P%",s3v:"39.1"},{name:"Jaylen Thomas",pos:"Small Forward",num:"11",ppg:"15.8",s2:"RPG",s2v:"6.2",s3:"BPG",s3v:"1.1"},{name:"Andre Mitchell",pos:"Power Forward",num:"24",ppg:"13.6",s2:"RPG",s2v:"8.9",s3:"FG%",s3v:"52.4"},{name:"Chris Robinson",pos:"Center",num:"32",ppg:"11.2",s2:"RPG",s2v:"10.6",s3:"BPG",s3v:"2.8"},{name:"Terrence Jones",pos:"Guard",num:"05",ppg:"14.1",s2:"APG",s2v:"4.7",s3:"SPG",s3v:"1.8"},{name:"Malik Brown",pos:"Forward",num:"15",ppg:"12.3",s2:"RPG",s2v:"7.1",s3:"FG%",s3v:"49.5"},{name:"Isaiah Green",pos:"Guard",num:"07",ppg:"10.8",s2:"APG",s2v:"5.3",s3:"3P%",s3v:"36.8"},{name:"Kyle Washington",pos:"Forward",num:"22",ppg:"9.6",s2:"RPG",s2v:"5.5",s3:"BPG",s3v:"1.4"},{name:"Darius Coleman",pos:"Center",num:"44",ppg:"8.9",s2:"RPG",s2v:"9.2",s3:"BPG",s3v:"2.2"}];
+const rg=document.getElementById('rosterGrid');
+players.forEach((p,i)=>{const ini=p.name.split(' ').map(w=>w[0]).join('');const c=document.createElement('div');c.className='player-card reveal '+dl[i%6];c.innerHTML=`<div class="player-visual"><div class="player-portrait"><div class="player-portrait-bg"></div><div class="player-portrait-num">${p.num}</div><div class="player-glow"></div><div class="player-portrait-sil"><svg viewBox="0 0 200 320" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="55" r="32" fill="var(--orange)" opacity=".18"/><path d="M58 105C58 92 72 80 100 80C128 80 142 92 142 105L150 195C150 205 146 210 138 210L62 210C54 210 50 205 50 195Z" fill="var(--orange)" opacity=".12"/><rect x="46" y="210" width="28" height="90" rx="10" fill="var(--orange)" opacity=".08"/><rect x="126" y="210" width="28" height="90" rx="10" fill="var(--orange)" opacity=".08"/><text x="100" y="165" text-anchor="middle" font-family="Anton,sans-serif" font-size="46" fill="var(--teal)" opacity=".22">${ini}</text></svg></div></div><div class="player-overlay"></div><div class="player-accent"></div></div><div class="player-info"><div class="player-pos">${p.pos}</div><div class="player-name">${p.name}</div><div class="player-stats"><span>PPG <strong>${p.ppg}</strong></span><span>${p.s2} <strong>${p.s2v}</strong></span><span>${p.s3} <strong>${p.s3v}</strong></span></div></div>`;rg.appendChild(c)});
+
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('hidden')},1600)});
+window.addEventListener('scroll',()=>{document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>60)});
+document.getElementById('menuOpen').addEventListener('click',()=>{document.getElementById('mobileMenu').classList.add('open')});
+document.getElementById('menuClose').addEventListener('click',closeMenu);
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open')}
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('visible')})},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}})});
+</script>
+</body>
+</html>
